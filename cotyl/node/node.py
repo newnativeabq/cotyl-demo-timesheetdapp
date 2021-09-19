@@ -25,6 +25,7 @@ class NodeBase(BaseModel):
     interfaces: Optional[List[Interface]]
     routes: Optional[List[Route]]
     
+    
 
 class Node():
     def __init__(self, **data: Any) -> None:
@@ -32,31 +33,36 @@ class Node():
         self.__node_id = None
         self.__node_id_set = False
 
+
     @property
     def name(self):
         return self.base.name
+
 
     @property
     def router(self):
         return self.base.router
 
+
     @property
     def interfaces(self):
         return self.base.interfaces
 
+
     @property
     def routes(self):
         return self.base.routes
+
 
     @property 
     def node_id(self):
         if self.__node_id_set:
             return self.__node_id
 
+
     @node_id.setter
     def node_id(self, value: str):
         if self.__node_id_set:
             raise ValueError('Cannot reset node ID')
-        else:
-            self.__node_id_set = True
-            self.__node_id = value
+        self.__node_id_set = True
+        self.__node_id = value
