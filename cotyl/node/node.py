@@ -32,6 +32,22 @@ class Node():
         self.__node_id = None
         self.__node_id_set = False
 
+    @property
+    def name(self):
+        return self.base.name
+
+    @property
+    def router(self):
+        return self.base.router
+
+    @property
+    def interfaces(self):
+        return self.base.interfaces
+
+    @property
+    def routes(self):
+        return self.base.routes
+
     @property 
     def node_id(self):
         if self.__node_id_set:
