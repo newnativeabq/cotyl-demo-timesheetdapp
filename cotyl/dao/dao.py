@@ -9,10 +9,63 @@ The DAO object handles:
 
 from cotyl.node.node import Node
 from cotyl.dao.graph import DGraph
+from cotyl.utils import coalesce, filter_dict
+
+from typing import List
 
 class DAO():
-    def __init__(self) -> None:
+    def __init__(self, nodes: List[Node], **kwargs) -> None:
         self.graph = DGraph()
+        self.nodes = tuple(nodes)
+        self.__registry_hist = {}
+        self.register_all(**kwargs)
+        self.kwargs = kwargs
+        
 
-    def register(self, node: Node):
-        pass
+
+    def __index_node(self, node: Node):
+        # Index the node in a registration history for future lookup and to prevent
+        # repeated registrations.
+        try:
+            max_node_index = max(self.__registry_hist.values())
+        except:
+            max_node_index = None
+        self.__registry_hist[node.node_id] = (coalesce(max_node_index, 0), node)
+
+
+
+    def register(self, node: Node, **kwargs):
+        # Setup node and assign unique identifiers, parameters
+        node = self.setup_node(node, **kwargs)
+
+        # Check registration status is false
+        if node.node_id in self.__registry_hist.keys():
+            raise ValueError("Node already registered")
+        
+        # Register the Node and index its position 
+        self.graph.register_node(node)
+        self.__index_node(node)
+        
+
+    
+    def register_all(self, **kwargs):
+        def _register_node(node, **kwargs):
+            self.register(node=node, **kwargs)
+        list(map(_register_node, self.nodes))
+
+
+
+    def setup_node(self, node: Node) -> Node:
+        # Setup DAO controlled node parameters.
+        node.node_id = hash(node)
+        return node
+
+
+    def visualize(self):
+        viz_kwargs = filter_dict(
+            self.kwargs,
+            [
+                'with_labels'
+            ]
+            )
+        self.graph.draw(**viz_kwargs)

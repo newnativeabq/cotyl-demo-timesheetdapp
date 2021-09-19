@@ -13,14 +13,14 @@ logger = logging.getLogger(__name__)
 
 class DGraph():
     def __init__(self):
-        self.__g = nx.Graph()
+        self.__g = nx.MultiDiGraph()
         
     def register_node(self, node: Node):
         def _get_edges_from_routes(node: Node):
             logger.warn("Not Implemented.  Unable to introspect edges from node just yet.")
 
-        self.__g.add_nodes_from(node.nodes)
-        self.__g.add_edges_from(node.edges)
+        self.__g.add_node(node.node_id)
+        # self.__g.add_edges_from(_get_edges_from_routes(node))  ## TODO: Get Edges from routes
         logging.debug(f"added {node.name}:{node.node_id}, {_get_edges_from_routes(node.routes)}")
         
     @property
@@ -43,4 +43,5 @@ class DGraph():
         return self.__g[a][b]
     
     def draw(self, *args, **kwargs):
-        nx.draw(self.__g, *args, **kwargs)
+        logger.warn("visualization not fully integrated.  Only outputting dot format")
+        pydot = nx.nx_pydot.write_dot(self.__g, 'viz.dot')
