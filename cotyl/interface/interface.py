@@ -23,6 +23,7 @@ class Interface(InterfaceBase):
         self.__interface_id_set = False
         self.__router = None
         self.__router_set = None
+        self.__setup = False
 
 
     @property
@@ -66,12 +67,13 @@ class Interface(InterfaceBase):
 
 
     def expose(self) -> List[Connection]:
+        assert self.__setup == True, 'setup interface before exposing connections with interface.setup()'
         ready_connections = []
         for connection in self.connections:
-            self._setup_connection(connection)
             ready_connections.append(connection.open())
         return ready_connections
 
 
     def setup(self):
-        pass
+        for connection in self.connections:
+            self._setup_connection(connection)

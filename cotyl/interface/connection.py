@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 class ConnectionBase(BaseModel):
     name: str
-    schema: str
+    schema_name: str
     destination: str
     protocol: str
 
