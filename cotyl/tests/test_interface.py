@@ -38,7 +38,7 @@ def test_connection_push():
     logger.info('test message log')
 
 
-def test_log_interface():
+def test_log_interface_all_actions():
     r = Router()
     i = LogInterface()
     i.setup(router=r)
@@ -46,4 +46,3 @@ def test_log_interface():
     log_connection = i.expose()[0]
     message = Message(schema_name='test', data='log_test_message')
     log_connection.push(message)
-    assert 1 == 0
