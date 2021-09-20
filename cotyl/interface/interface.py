@@ -4,11 +4,14 @@ Interface Base
 Interfaces handle ingress and egress through nodes via network and local OS messaging.
 """
 
+from cotyl.message.message import Message
 from pydantic import BaseModel
 from typing import List, Any
 
 from cotyl.interface.connection import Connection
 from cotyl.node.router import Router
+
+import logging
 
 
 class InterfaceBase(BaseModel):
@@ -86,3 +89,51 @@ class Interface():
 
     def up(self, **kwargs):
         raise NotImplementedError(f'Up not implemented for interface {self.name}')
+
+
+
+#######################
+### Dummy Interface ###
+#######################
+# Example of creating an interface with connection to router
+from functools import partial
+
+
+def log(m, logger=logging.getLogger(__name__), router=None):
+    logger.info(m)
+    
+
+class LogInterfaceConnection(Connection):
+    def __init__(self, **data: Any) -> None:
+        data = {
+            'name':'log_connection',
+            'schema_name':'NULL_SCHEMA',
+            'destination':'logger',
+            'protocol':'logging',
+        }
+        super().__init__(**data)
+        self.interface_fn = None
+
+    def open(self):
+        return self
+
+    def push(self, m: Message):
+        print(m.data)
+        return self.interface_fn(m.data)
+
+
+
+class LogInterface(Interface):
+    def __init__(self, **data: Any) -> None:
+        super().__init__(name='log_interface', connections=[LogInterfaceConnection()])
+
+    def up(self):
+        pass
+
+    def setup(self, router: Router):
+        super().setup(router)
+        for connection in self.connections:
+            connection.interface_fn = partial(log, router=router)   # Interface will not hold the transform function.
+                                                                    # The router is being passed to the log function 
+                                                                    # to demonstrate router availability in building
+                                                                    # endpoints, etc.
