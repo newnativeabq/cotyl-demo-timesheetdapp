@@ -4,12 +4,11 @@ Router - node
 Introspects messages and calls appropriate route.
 """
 
-from pydantic import BaseModel
 from cotyl.node.route import Route
 from cotyl.message.message import Message
 
 
-class Router(BaseModel):
+class Router():
     def __init__(self) -> None:
         self.__routes = {}
 

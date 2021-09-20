@@ -24,6 +24,9 @@ class NodeBase(BaseModel):
     router: Optional[Router]
     interfaces: Optional[List[Interface]]
     routes: Optional[List[Route]]
+
+    class Config:
+        arbitrary_types_allowed = True
     
     
 

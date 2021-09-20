@@ -9,6 +9,8 @@ push/open methods to send data to the interface.
 from pydantic import BaseModel
 from typing import Any
 
+from cotyl.message.message import Message
+
 import logging 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +24,7 @@ class ConnectionBase(BaseModel):
 
 
 
-class Connection(ConnectionBase):
+class Connection():
     def __init__(self, **data: Any) -> None:
         self.base = ConnectionBase(**data)
         self.__connection_id = None
@@ -51,5 +53,34 @@ class Connection(ConnectionBase):
         raise NotImplementedError(f'open method not implemented for connection {self.name}')
 
 
-    def push(self, message):
+    def push(self, message: Message):
         raise NotImplementedError(f'push method not implemented for connection {self.name}')
+
+
+
+
+
+
+########################
+### Test Connections ###
+########################
+
+class LogConnection(Connection):
+    def __init__(self) -> None:
+        """Log Connection
+            Log messages. Primarily for debugging
+        """
+        data = {
+            'name':'print_connection',
+            'schema_name':'NULL_SCHEMA',
+            'destination':'logger',
+            'protocol':'logging',
+        }
+        super().__init__(**data)
+        self.logger = logging.getLogger(__name__)
+
+    def open(self) -> Connection:
+        return self
+
+    def push(self, message: Message):
+        self.logger.info(message)

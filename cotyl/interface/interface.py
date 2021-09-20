@@ -15,8 +15,11 @@ class InterfaceBase(BaseModel):
     name: str
     connections: List[Connection]
 
+    class Config:
+        arbitrary_types_allowed = True
 
-class Interface(InterfaceBase):
+
+class Interface():
     def __init__(self, **data: Any) -> None:
         self.base = InterfaceBase(**data)
         self.__interface_id = None
@@ -74,6 +77,12 @@ class Interface(InterfaceBase):
         return ready_connections
 
 
-    def setup(self):
+    def setup(self, router:Router):
+        self.router = router
         for connection in self.connections:
             self._setup_connection(connection)
+        self.__setup = True
+
+
+    def up(self, **kwargs):
+        raise NotImplementedError(f'Up not implemented for interface {self.name}')
