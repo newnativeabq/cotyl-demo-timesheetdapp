@@ -58,6 +58,7 @@ class DAO():
     def setup_node(self, node: Node) -> Node:
         # Setup DAO controlled node parameters.
         node.node_id = hash(node)
+        node.setup()
         return node
 
 

@@ -6,7 +6,7 @@ Interfaces handle ingress and egress through nodes via network and local OS mess
 
 from cotyl.message.message import Message
 from pydantic import BaseModel
-from typing import List, Any
+from typing import List, Any, Optional
 
 from cotyl.interface.connection import Connection
 from cotyl.node.router import Router
@@ -15,8 +15,8 @@ import logging
 
 
 class InterfaceBase(BaseModel):
-    name: str
-    connections: List[Connection]
+    name: Optional[str]
+    connections: Optional[List[Connection]]
 
     class Config:
         arbitrary_types_allowed = True
@@ -80,10 +80,10 @@ class Interface():
         return ready_connections
 
 
-    def setup(self, router:Router):
+    def setup(self, router:Router, **kwargs):
         self.router = router
         for connection in self.connections:
-            self._setup_connection(connection)
+            self._setup_connection(connection, **kwargs)
         self.__setup = True
 
 

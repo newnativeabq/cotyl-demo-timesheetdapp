@@ -69,3 +69,8 @@ class Node():
             raise ValueError('Cannot reset node ID')
         self.__node_id_set = True
         self.__node_id = value
+
+
+    def setup(self, *args, **kwargs):
+        for interface in self.interfaces:
+            interface.setup(self.router, *args, **kwargs)

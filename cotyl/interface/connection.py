@@ -7,7 +7,7 @@ push/open methods to send data to the interface.
 """
 
 from pydantic import BaseModel
-from typing import Any
+from typing import Any, Optional
 
 from cotyl.message.message import Message
 
@@ -17,10 +17,10 @@ logger = logging.getLogger(__name__)
 
 
 class ConnectionBase(BaseModel):
-    name: str
-    schema_name: str
-    destination: str
-    protocol: str
+    name: Optional[str]
+    schema_name: Optional[str]
+    destination: Optional[str]
+    protocol: Optional[str]
 
 
 
