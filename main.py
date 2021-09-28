@@ -13,7 +13,7 @@ dao = DAO(
         webnode,
         transaction_builder,
         querychain,
-        transaction_submitter
+        transaction_submitter,
         ]
 )
 

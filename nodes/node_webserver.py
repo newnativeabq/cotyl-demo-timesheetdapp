@@ -53,14 +53,14 @@ class WebNodeWebConnection(Connection):
     
     def push(self, *args, **kwargs):
         if hasattr(self, 'request'):
-            return self.request(self.url, *args, **kwargs)
+            return self.request(self.url, *args, **kwargs)  ## return alows arbitrary chain through DAO
 
 
 def simple_get(url, *args, **kwargs):
     return requests.get(url)
 
-# Construct the node
 
+# Construct the node
 web_interface = WebNodeWebInterface(
     name='WebInterface',
     connections=[WebNodeWebConnection(name='get_root', request=simple_get)]

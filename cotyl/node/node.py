@@ -72,5 +72,7 @@ class Node():
 
 
     def setup(self, *args, **kwargs):
+        if self.interfaces is None:
+            return False
         for interface in self.interfaces:
             interface.setup(self.router, *args, **kwargs)
