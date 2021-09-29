@@ -5,7 +5,17 @@ Constructor for building node routes
 """
 
 from pydantic import BaseModel
+from cotyl.node.transform import Transform
+from cotyl.interface.connection import Connection
 
 
 class Route(BaseModel):
-    transform
+    
+    transform: Transform
+    egress: Connection
+
+    class Config:
+        arbitrary_types_allowed = True
+
+    def __call__(self, m):
+        return self.egress(self.transform(m))

@@ -49,6 +49,10 @@ class Connection():
         self.__connection_id = value
 
 
+    def __call__(self, message: Message):
+        return self.push(message)
+
+
     def open(self) -> ConnectionBase:
         raise NotImplementedError(f'open method not implemented for connection {self.name}')
 
@@ -95,4 +99,4 @@ class NullConnection(Connection):
         return self
 
     def push(self, message: Message):
-        return None
+        return message

@@ -16,3 +16,11 @@ class Transform(BaseModel):
 
     def __call__(self, m):
         return self.fn(self.validator(m))
+
+
+
+null_transform = Transform(
+    name = 'NullTransform',
+    validator = lambda x: x,
+    fn = lambda x: x,
+)
