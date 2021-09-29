@@ -84,3 +84,15 @@ class LogConnection(Connection):
 
     def push(self, message: Message):
         self.logger.info(message)
+
+
+class NullConnection(Connection):
+    """Null Connection
+        Primarily for tests.  Overrides required methods with minimal returns.
+    """
+
+    def open(self) -> Connection:
+        return self
+
+    def push(self, message: Message):
+        return None

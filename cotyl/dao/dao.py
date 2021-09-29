@@ -8,20 +8,22 @@ The DAO object handles:
 """
 
 from cotyl.node.node import Node
+from cotyl.network.dao_network_node import build_dao_network_node_from_connections
 from cotyl.dao.graph import DGraph
 from cotyl.utils import coalesce, filter_dict
 
 from typing import List
 
 class DAO():
+    
     def __init__(self, nodes: List[Node], **kwargs) -> None:
         self.graph = DGraph()
         self.nodes = tuple(nodes)
         self.__registry_hist = {}
         self.register_all(**kwargs)
         self.kwargs = kwargs
+        self.connections = []
         
-
 
     def __index_node(self, node: Node):
         # Index the node in a registration history for future lookup and to prevent
@@ -31,7 +33,6 @@ class DAO():
         except:
             max_node_index = None
         self.__registry_hist[node.node_id] = (coalesce(max_node_index, 0), node)
-
 
 
     def register(self, node: Node, **kwargs):
@@ -45,8 +46,10 @@ class DAO():
         # Register the Node and index its position 
         self.graph.register_node(node)
         self.__index_node(node)
-        
 
+        # Dump node connections
+        self.connections.append(node.connections)
+        
     
     def register_all(self, **kwargs):
         def _register_node(node, **kwargs):
@@ -62,6 +65,13 @@ class DAO():
         return node
 
 
+    def _inject_runtime_nodes(self):
+        # Build central networking node and add to network
+        dao_network_node = build_dao_network_node_from_connections(self.connections)
+        self.setup_node(dao_network_node)
+        self.graph.register_node(dao_network_node)
+        
+
     def visualize(self):
         viz_kwargs = filter_dict(
             self.kwargs,
@@ -70,3 +80,7 @@ class DAO():
             ]
             )
         self.graph.draw(**viz_kwargs)
+
+
+    def run(self):
+        raise NotImplementedError("Run Not Ready Yet")

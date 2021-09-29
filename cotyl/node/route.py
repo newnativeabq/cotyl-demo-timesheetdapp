@@ -8,4 +8,4 @@ from pydantic import BaseModel
 
 
 class Route(BaseModel):
-    pass
+    transform

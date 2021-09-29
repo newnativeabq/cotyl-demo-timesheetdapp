@@ -38,7 +38,10 @@ class WebNodeWebInterface(Interface):
                 'port',
             ])
         app = build_app()
-        process = serve_app(app, **web_kwargs)
+        self.process = serve_app(app, **web_kwargs)
+
+    def down(self):
+        self.process.kill()
 
 
 # Define the flavor of connections we expect from the webserver

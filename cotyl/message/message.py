@@ -8,8 +8,9 @@ from typing import Any
 
 
 class Message():
-    def __init__(self, schema_name: str, data: Any) -> None:
+    def __init__(self, schema_name: str, destination: str, data: Any) -> None:
         self.schema_name = schema_name
+        self.destination = destination
         self.data = data
 
     def serialize(self, data: Any):

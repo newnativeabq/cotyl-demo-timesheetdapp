@@ -62,6 +62,13 @@ class Node():
         if self.__node_id_set:
             return self.__node_id
 
+    @property
+    def connections(self):
+        cons = []
+        for i in self.interfaces:
+            cons.extend(i.expose())
+        return cons
+
 
     @node_id.setter
     def node_id(self, value: str):
