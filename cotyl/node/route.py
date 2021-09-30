@@ -14,6 +14,14 @@ class Route(BaseModel):
     transform: Transform
     egress: Connection
 
+    @property
+    def destination(self):
+        return self.egress.destination
+
+    @property
+    def schema_name(self):
+        return self.egress.schema_name
+
     class Config:
         arbitrary_types_allowed = True
 

@@ -54,7 +54,7 @@ class DAONetworkConnection(Connection):
     def open(self):
         return self
     
-    def push(self, m: Message):
+    def push(self, m: Message) -> Message:
         assert type(m) == Message
         return self.router(m)
 
@@ -67,7 +67,7 @@ class DAONetworkConnection(Connection):
 dao_interface = DAONetworkInterface(
     name='DAOInterface',
     connections=[
-        DAONetworkConnection(name='push_dao')
+        DAONetworkConnection(name='DAOConnection')
     ]
 )
 
@@ -75,7 +75,9 @@ dao_interface = DAONetworkInterface(
 def build_dao_network_node_from_connections(connections: List[Connection]):
     
     def _build_router_from_connections(connections) -> Router:
-        raise NotImplementedError("Building the router from connections not quite there yet")
+        r = Router()
+        for connection in connections:
+            route = _build_default_route(connection)
 
     return Node(
         name='DAO Network',

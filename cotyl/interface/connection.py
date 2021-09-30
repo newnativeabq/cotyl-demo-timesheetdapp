@@ -94,6 +94,8 @@ class NullConnection(Connection):
     """Null Connection
         Primarily for tests.  Overrides required methods with minimal returns.
     """
+    destination: Optional[str] = 'return'
+    schema_name: str = 'any'
 
     def open(self) -> Connection:
         return self
