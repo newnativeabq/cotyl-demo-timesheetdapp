@@ -33,7 +33,7 @@ def test_interface_expose_first_fail():
 
 def test_connection_push():
     connection = LogConnection()
-    message = Message(schema_name='test', data='test_message')
+    message = Message(schema_name='test', data='test_message', destination='log')
     connection.push(message)
     logger.info('test message log')
 
@@ -44,5 +44,5 @@ def test_log_interface_all_actions():
     i.setup(router=r)
     i.up()
     log_connection = i.expose()[0]
-    message = Message(schema_name='test', data='log_test_message')
+    message = Message(schema_name='test', data='log_test_message', destination='log')
     log_connection.push(message)

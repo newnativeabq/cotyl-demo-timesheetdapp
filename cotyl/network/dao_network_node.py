@@ -8,9 +8,11 @@ ingress connections via metadata, message type.
 from multiprocessing import Value
 from cotyl.node.node import Node
 from cotyl.node.router import Router
+from cotyl.node.route import Route
 from cotyl.interface.interface import Interface
 from cotyl.interface.connection import Connection
 from cotyl.message.message import Message
+from cotyl.node.transform import null_transform
 from typing import Any, List
 
 
@@ -22,9 +24,9 @@ class DAONetworkInterface(Interface):
     def __init__(self, **data: Any) -> None:
         super().__init__(**data)
     
-    def _setup_connection(self, connection: Connection):
+    def _setup_connection(self, connection: Connection, *args, **kwargs):
         connection.router = self.router
-        return super()._setup_connection(connection)
+        return super()._setup_connection(connection, *args, **kwargs)
     
     def setup(self, router: Router, host=None, port=None):
         return super().setup(router, host=host, port=port)
@@ -64,23 +66,34 @@ class DAONetworkConnection(Connection):
 
 ## Construct the Node ##
 
+default_connnection = DAONetworkConnection(name='DAOConnection')
+
 dao_interface = DAONetworkInterface(
     name='DAOInterface',
     connections=[
-        DAONetworkConnection(name='DAOConnection')
+        default_connnection
     ]
 )
 
 
 def build_dao_network_node_from_connections(connections: List[Connection]):
+
+    def _build_default_route(connection: Connection) -> Route:
+        return Route(
+            transform=null_transform,
+            egress=connection,
+        )
     
     def _build_router_from_connections(connections) -> Router:
         r = Router()
         for connection in connections:
             route = _build_default_route(connection)
+            r.add_route(route)
+        return r
 
     return Node(
         name='DAO Network',
         interfaces=[dao_interface],
         router=_build_router_from_connections(connections)
     )
+

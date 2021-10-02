@@ -68,7 +68,7 @@ class Interface():
         self.__router = value        
 
 
-    def _setup_connection(self, connection: Connection):
+    def _setup_connection(self, connection: Connection, *args, **kwargs):
         connection.connection_id = hash(connection)
 
 
@@ -80,10 +80,10 @@ class Interface():
         return ready_connections
 
 
-    def setup(self, router:Router, **kwargs):
+    def setup(self, router:Router, *args, **kwargs):
         self.router = router
         for connection in self.connections:
-            self._setup_connection(connection, **kwargs)
+            self._setup_connection(connection, *args, **kwargs)
         self.__setup = True
 
 
