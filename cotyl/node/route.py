@@ -14,6 +14,9 @@ class Route(BaseModel):
     transform: Transform
     egress: Connection
 
+    class Config:
+        arbitrary_types_allowed = True
+
     @property
     def destination(self):
         return self.egress.destination

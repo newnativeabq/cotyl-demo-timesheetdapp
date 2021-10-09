@@ -66,7 +66,12 @@ def simple_get(url, *args, **kwargs):
 # Construct the node
 web_interface = WebNodeWebInterface(
     name='WebInterface',
-    connections=[WebNodeWebConnection(name='get_root', request=simple_get)]
+    connections=[WebNodeWebConnection(
+                    name='get_root', 
+                    request=simple_get,
+                    destination='node_webserver',
+                    ),
+    ]
 )
 
 webnode = Node(

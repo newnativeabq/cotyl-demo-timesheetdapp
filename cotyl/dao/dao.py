@@ -49,7 +49,7 @@ class DAO():
         self.__index_node(node)
 
         # Dump node connections
-        self.connections.append(node.connections)
+        self.connections.extend(node.connections)
         
     
     def register_all(self, **kwargs):

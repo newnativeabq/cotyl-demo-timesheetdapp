@@ -18,9 +18,12 @@ logger = logging.getLogger(__name__)
 
 class ConnectionBase(BaseModel):
     name: Optional[str]
-    schema_name: Optional[str]
+    schema_name: Optional[str] = 'None'
     destination: Optional[str]
     protocol: Optional[str]
+
+    def __repr__(self):
+        return f"<Connection> {self.name}: destination {self.destination}"
 
 
 
@@ -35,10 +38,17 @@ class Connection():
     def name(self):
         return self.base.name
 
-
     @property
     def connection_id(self):
         return self.__connection_id
+
+    @property
+    def destination(self):
+        return self.base.destination
+
+    @property
+    def schema_name(self):
+        return self.base.schema_name
 
 
     @connection_id.setter
