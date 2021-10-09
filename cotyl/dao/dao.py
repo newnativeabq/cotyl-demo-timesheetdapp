@@ -20,9 +20,10 @@ class DAO():
         self.graph = DGraph()
         self.nodes = tuple(nodes)
         self.__registry_hist = {}
-        self.register_all(**kwargs)
-        self.kwargs = kwargs
         self.connections = []
+        self.kwargs = kwargs
+
+        self.register_all(**kwargs)
         
 
     def __index_node(self, node: Node):
@@ -55,6 +56,7 @@ class DAO():
         def _register_node(node, **kwargs):
             self.register(node=node, **kwargs)
         list(map(_register_node, self.nodes))
+        self._inject_runtime_nodes()
 
 
 

@@ -65,8 +65,9 @@ class Node():
     @property
     def connections(self):
         cons = []
-        for i in self.interfaces:
-            cons.extend(i.expose())
+        if self.interfaces is not None:
+            for i in self.interfaces:
+                cons.extend(i.expose())
         return cons
 
 

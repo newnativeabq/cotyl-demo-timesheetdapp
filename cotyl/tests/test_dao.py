@@ -10,6 +10,7 @@ import logging
 from cotyl.node import router 
 logger = logging.getLogger(__name__)
 
+
 def test_dao_network_node():
     node = build_dao_network_node_from_connections([NullConnection()])
     node.setup()
